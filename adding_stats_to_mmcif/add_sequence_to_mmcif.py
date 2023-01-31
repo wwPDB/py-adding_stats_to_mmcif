@@ -85,6 +85,7 @@ class ExtractFromMmcif:
             sequence = ''.join(sequence_list)
             if sequence:
                 self.sequence_dict.setdefault(entity_id, {})['sequence'] = sequence
+                self.sequence_dict[entity_id]['chains'] = []
 
     def get_data_from_atom_site(self):
         atom_site_dict = dict()
@@ -122,6 +123,11 @@ class ExtractFromMmcif:
                         self.sequence_dict.setdefault(entity_id, {}).setdefault('chains', []).append(chain_id)
                         one_letter_sequence = ''.join(atom_site_sequence_dict[entity_id][chain_id])
                         self.sequence_dict.setdefault(entity_id, {})['sequence'] = one_letter_sequence
+        
+        # checking if all entity ids are present in atom_site
+        for entity_id in self.sequence_dict:
+            if entity_id not in atom_site_dict:
+                logger.warning("Entity id %s not present in atom_site", entity_id)
 
     def remove_category(self, category):
         self.mm.removeCategory(category=category)
