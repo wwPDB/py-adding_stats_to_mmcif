@@ -73,7 +73,8 @@ class ExtractFromMmcif:
                 entity_id = row['entity_id']
                 three_letter = row['mon_id']
                 num = row['num']
-                hetero = row['hetero']
+                # not in use + breaks script when not in input:
+                # hetero = row['hetero']
 
                 one_letter = self.get_one_letter_code(three_letter=three_letter)
                 # if hetero == 'n': # hetero is used for a heterogen instead of microhet in refmac.

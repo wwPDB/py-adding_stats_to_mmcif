@@ -8,30 +8,39 @@ from .xml_parsing import parse_xml
 
 logger = logging.getLogger()
 
+
+# AL: not obvious decision, keeping as it was.
+#all = 'Overall'
+_all = ''
+
+# AL:  corrections/additions in: pdbx_chi_squared, number_unique_obs,
+# meanI_over_sigI_obs, pdbx_chi_squared, percent_possible_all
 stats_remap = {
     'reflns': {'pos_list': ['Overall'],
                'cif_to_xml':
                    {'d_resolution_low': 'ResolutionLow',
                     'd_resolution_high': 'ResolutionHigh',
-                    'pdbx_Rmerge_I_obs': 'Rmerge',
-                    'pdbx_Rrim_I_all': 'Rmeas',
-                    'pdbx_Rpim_I_all': 'Rpim',
+                    'pdbx_Rmerge_I_obs': 'Rmerge' + _all,
+                    'pdbx_Rrim_I_all': 'Rmeas' + _all,
+                    'pdbx_Rpim_I_all': 'Rpim' + _all,
                     'number_obs': 'NumberReflections',
                     'pdbx_netI_over_sigmaI': 'MeanIoverSD',
                     'pdbx_CC_half': 'CChalf',
+                    'pdbx_chi_squared': 'MeanChiSq',
                     'percent_possible_obs': 'Completeness',
                     'pdbx_redundancy': 'Multiplicity'}},
     'reflns_shell': {'pos_list': ['Inner', 'Outer'],
                      'cif_to_xml':
                          {'d_res_low': 'ResolutionLow',
                           'd_res_high': 'ResolutionHigh',
-                          'Rmerge_I_obs': 'Rmerge',
-                          'pdbx_Rrim_I_all': 'Rmeas',
-                          'pdbx_Rpim_I_all': 'Rpim',
-                          'number_measured_obs': 'NumberReflections',
-                          'pdbx_netI_over_sigmaI': 'MeanIoverSD',
+                          'Rmerge_I_obs': 'Rmerge' + _all,
+                          'pdbx_Rrim_I_all': 'Rmeas' + _all,
+                          'pdbx_Rpim_I_all': 'Rpim' + _all,
+                          'number_unique_obs': 'NumberReflections',
+                          'meanI_over_sigI_obs': 'MeanIoverSD',
                           'pdbx_CC_half': 'CChalf',
-                          'percent_possible_obs': 'Completeness',
+                          'pdbx_chi_squared': 'MeanChiSq',
+                          'percent_possible_all': 'Completeness',
                           'pdbx_redundancy': 'Multiplicity'}}
 }
 
