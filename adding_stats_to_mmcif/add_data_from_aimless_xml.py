@@ -19,6 +19,33 @@ def get_xml_data(xml_file):
 
     return xml_data, software_row
 
+def fix_resolution_limits(pc):
+    # fix discrepancy between low resolution limits
+    b = pc.cif_handling.cifObj[0]
+    r1 = b.find_values('_refine.ls_d_res_low')
+    r2 = b.find_values('_refine_ls_shell.d_res_low')
+    ai = b.find_values('_reflns.d_resolution_low')[0]
+    b.find_values('_reflns_shell.d_res_low')[0] = ai
+    if float(r1[0]) > float(ai):
+      r1[0] = ai
+    if float(r2[0]) > float(ai):
+      r2[0] = ai
+    r1 = b.find_values('_refine.ls_d_res_high')
+    r2 = b.find_values('_refine_ls_shell.d_res_high')
+    ai = b.find_values('_reflns.d_resolution_high')[-1]
+    b.find_values('_reflns_shell.d_res_high')[-1] = ai
+    if float(r1[-1]) < float(ai):
+      r1[-1] = ai
+    if float(r2[-1]) < float(ai):
+      r2[-1] = ai
+
+def fix_resolution_cross_val(pc):
+    b = pc.cif_handling.cifObj[0]
+    c = b.get_mmcif_category('_refine')
+    for k in c:
+      c[k] = c[k][0]
+    c['pdbx_ls_cross_valid_method'] = 'FREE R-VALUE'
+    b.set_pairs('_refine.', c, False)
 
 def run_process(xml_file, input_cif, output_cif):
     xml_data, software_row = get_xml_data(xml_file=xml_file)
@@ -29,6 +56,8 @@ def run_process(xml_file, input_cif, output_cif):
             pc.parse_mmcif(fileName=input_cif)
             # add aimless data to the mmCIF file
             ok = pc.addToCif(data_dictionary=xml_data)
+            fix_resolution_limits(pc)
+            fix_resolution_cross_val(pc)
             # update the software list in the mmCIF file to add aimless
             software_cat = pc.addValuesToCategory(category='software', item_value_dictionary=software_row,
                                                   ordinal_item='pdbx_ordinal')

@@ -4,7 +4,11 @@ import logging
 
 from Bio import Align
 from Bio import pairwise2
-from Bio.SubsMat import MatrixInfo as matlist
+# AL: hiding warnings, could be done better
+import warnings
+with warnings.catch_warnings():
+  warnings.simplefilter("ignore")
+  from Bio.SubsMat import MatrixInfo as matlist
 
 # from Bio import AlignIO
 # from Bio.Emboss.Applications import NeedleCommandline
